@@ -1,21 +1,37 @@
-### jialiao(加里奥)
+package io.github.liuyuyu;
 
-全都是彩蛋的Excel读写库
-```
-Jiliao.r(Data.class) //选择友方英雄（选择目标）
-      .w() //w吸收伤害并嘲讽（读） / .e() //e击飞（写）
-      .q() //持续伤害（返回结果）
-```
+import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.liuyuyu.model.UserOrder;
+import org.junit.Test;
 
-导出用法
-```
-        //设置时间格式
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static org.junit.Assert.*;
+
+/**
+ * @author liuyuyu
+ */
+public class JiaLiAoTest {
+
+    @Test
+    public void testWrite() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
+        //设置时间格式
         SimpleDateFormat myDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         mapper.setDateFormat(myDateFormat);
         JiaLiAo.renascence(mapper);
 
-        //准备数据
+        //导出
         List<UserOrder> dataList = IntStream.range(0, 100)
                 .boxed()
                 .map(i -> {
@@ -28,9 +44,10 @@ Jiliao.r(Data.class) //选择友方英雄（选择目标）
                     return userOrder;
                 })
                 .collect(Collectors.toList());
-        //导出
         OutputStream os = new FileOutputStream("out/userOrder.xlsx");
         JiaLiAo.r(UserOrder.class, false)
                 .e(dataList)
                 .q("导出的订单", os);
-```
+    }
+
+}
