@@ -7,7 +7,13 @@ Jiliao.r(Data.class) //选择友方英雄（选择目标）
       .q() //持续伤害（返回结果）
 ```
 
-导出用法
+
+导出Excel用法
+```
+git clone https://github.com/liuyuyu/jialiao
+然后拷贝jialiao代码到你的工程
+```
+开始使用
 ```
         //设置时间格式
         ObjectMapper mapper = new ObjectMapper();
@@ -34,3 +40,10 @@ Jiliao.r(Data.class) //选择友方英雄（选择目标）
                 .e(dataList)
                 .q("导出的订单", os);
 ```
+
+看这战绩就应该知道加里奥有多厉害了（傲娇脸）
+![战绩](doc/img/jialiao_zj.png)
+
+### 捐赠
+
+电信一区求带上白银，ID:不如剑舞
