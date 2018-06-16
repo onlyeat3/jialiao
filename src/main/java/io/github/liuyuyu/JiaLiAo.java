@@ -7,8 +7,12 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.*;
 
 /**
@@ -28,26 +32,26 @@ public class JiaLiAo<T> {
         OBJECT_MAPPER = objectMapper;
     }
 
-    public static <T> JiaLiAo r(Class<T> clazz,Boolean is03){
-        return new JiaLiAo<>(clazz,is03);
+    public static <T> JiaLiAo<T> r(Class<T> clazz,Boolean is03){
+        return new JiaLiAo<>(clazz, is03);
     }
 
-    public E<T> e(List<Object> dataList){
+    public E<T> e(List<T> dataList){
         return new E<>(this,dataList);
     }
 
-    public W<T> w(){
-        return new W<>(this);
+    public W<T> w(Boolean hasHeader,InputStream is){
+        return new W<>(this, hasHeader, is);
     }
 
     /**
      * E技能，击飞（写）
      */
-    static class E<T>{
-        private JiaLiAo<T> jiaLiAo;
-        private List<Object> dataList = new ArrayList<>();
+    static class E<ET>{
+        private JiaLiAo<ET> jiaLiAo;
+        private List<ET> dataList = new ArrayList<>();
 
-        public E(JiaLiAo<T> jiaLiAo, List<Object> dataList) {
+        public E(JiaLiAo<ET> jiaLiAo, List<ET> dataList) {
             this.jiaLiAo = jiaLiAo;
             this.dataList = dataList;
         }
@@ -109,15 +113,52 @@ public class JiaLiAo<T> {
     /**
      * W技能，吸收伤害并嘲讽敌人（读）
      */
-    static class W<T>{
-        private JiaLiAo jiaLiAo;
+    static class W<WT>{
+        private JiaLiAo<WT> jiaLiAo;
+        /**
+         * 是否存在表头
+         */
+        private Boolean hasHeader;
+        private InputStream inputStream;
 
-        W(JiaLiAo jiaLiAo) {
+        public W(JiaLiAo<WT> jiaLiAo, Boolean hasHeader, InputStream inputStream) {
             this.jiaLiAo = jiaLiAo;
+            this.hasHeader = hasHeader;
+            this.inputStream = inputStream;
         }
 
-        public T q(){
-            return null;
+        public List<WT> q() throws IOException {
+            Workbook workBook;
+            if(this.jiaLiAo.is03){
+                workBook = new HSSFWorkbook(this.inputStream);
+            }else{
+                workBook = new XSSFWorkbook(this.inputStream);
+            }
+            //读取工作表
+            Sheet sheet = workBook.getSheetAt(0);//反正你也不会放别的地方
+            //读取行
+            int rowNum = 0;
+            if(this.hasHeader){
+                rowNum = 1;
+            }
+            Row row = sheet.getRow(rowNum);
+            List<RowInfo> rowInfoList = ReflectionUtils.getAllFieldAnnotation(this.jiaLiAo.clazz, new ExcelCellComparator());
+            List<WT> dataList = new ArrayList<>();
+            for (int rowIndex = 0; rowIndex < sheet.getLastRowNum(); rowIndex++) {
+                Map<String,Object> map = new HashMap<>();
+                for (int columnIndex = 0; columnIndex < rowInfoList.size(); columnIndex++) {
+                    RowInfo rowInfo = rowInfoList.get(columnIndex);
+                    Cell cell = row.getCell(columnIndex);
+                    String value = cell.getStringCellValue();
+                    map.put(rowInfo.getFieldName(),value);
+                }
+                String mapJsonString = OBJECT_MAPPER.writeValueAsString(map);
+                Object o = OBJECT_MAPPER.readValue(mapJsonString, this.jiaLiAo.clazz);
+                dataList.add((WT) o);
+            }
+            inputStream.close();
+            workBook.close();
+            return dataList;
         }
     }
 
