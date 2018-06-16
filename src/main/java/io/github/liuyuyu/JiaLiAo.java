@@ -102,7 +102,11 @@ public class JiaLiAo<T> {
                     }
 
                     Cell cell = row.createCell(columnIndex, cellType);
-                    cell.setCellValue(value.toString());
+                    String vs = "";
+                    if(value != null){
+                        vs = value.toString();
+                    }
+                    cell.setCellValue(vs);
                 }
             }
             workbook.write(os);
