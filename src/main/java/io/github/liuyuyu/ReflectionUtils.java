@@ -2,10 +2,9 @@ package io.github.liuyuyu;
 
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.List;
 
 /**
  * @author liuyuyu
@@ -15,13 +14,17 @@ public class ReflectionUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static Map<String, JiaLiAo.ExcelCell> getAllFieldAnnotation(Class clazz, Comparator comparator){
+    public static List<JiaLiAo.RowInfo> getAllFieldAnnotation(Class clazz, Comparator<JiaLiAo.RowInfo> comparator){
         Field[] declaredFields = clazz.getDeclaredFields();
-        Map<String,JiaLiAo.ExcelCell> fieldNameAnnotationMap = new TreeMap<>(comparator);
+        List<JiaLiAo.RowInfo> rowInfoList = new ArrayList<>();
         for (Field field : declaredFields) {
             JiaLiAo.ExcelCell an = field.getAnnotation(JiaLiAo.ExcelCell.class);
-            fieldNameAnnotationMap.put(field.getName(),an);
+            JiaLiAo.RowInfo rowInfo = new JiaLiAo.RowInfo();
+            rowInfo.setFieldName(field.getName());
+            rowInfo.setAnnotation(an);
+            rowInfoList.add(rowInfo);
         }
-        return fieldNameAnnotationMap;
+        rowInfoList.sort(comparator);
+        return rowInfoList;
     }
 }

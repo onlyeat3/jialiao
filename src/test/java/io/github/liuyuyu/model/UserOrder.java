@@ -2,6 +2,7 @@ package io.github.liuyuyu.model;
 
 
 import io.github.liuyuyu.JiaLiAo;
+import org.apache.poi.ss.usermodel.CellType;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -17,12 +18,12 @@ public class UserOrder {
     /**
      * 用户名
      */
-    @JiaLiAo.ExcelCell(value = "用户名")
+    @JiaLiAo.ExcelCell(value = "用户名",order = 2)
     private String userName;
     /**
      * 订单总数
      */
-    @JiaLiAo.ExcelCell(value = "订单总数")
+    @JiaLiAo.ExcelCell(value = "订单总数",order = 1,cellType = CellType.NUMERIC)
     private Long totalOrder;
     /**
      * 订单总金额

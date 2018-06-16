@@ -60,17 +60,17 @@ public class JiaLiAo<T> {
                 workbook = new XSSFWorkbook();
             }
 
-            Map<String, ExcelCell> fieldNameAnnotationMap = ReflectionUtils.getAllFieldAnnotation(this.jiaLiAo.clazz,Comparator.reverseOrder());
+            List<RowInfo> rowInfoList = ReflectionUtils.getAllFieldAnnotation(this.jiaLiAo.clazz,new ExcelCellComparator());
 
             //创建工作表
             Sheet sheet = workbook.createSheet(name);
             //表头
             Row headerRow = sheet.createRow(0);
             int headerColumnIndex = 0;
-            for (String key : fieldNameAnnotationMap.keySet()) {
-                Cell cell = headerRow.createCell(headerColumnIndex,CellType.STRING);
-                ExcelCell excelCell = fieldNameAnnotationMap.get(key);
-                String fieldName = key;
+            for (RowInfo rowInfo : rowInfoList) {
+                Cell cell = headerRow.createCell(headerColumnIndex, CellType.STRING);
+                ExcelCell excelCell = rowInfo.getAnnotation();
+                String fieldName = rowInfo.getFieldName();
                 if(excelCell != null){
                     if(!"".equals(excelCell.value())){
                         fieldName = excelCell.value();
@@ -85,21 +85,20 @@ public class JiaLiAo<T> {
                 Object t = dataList.get(rowIndex);
                 String jsonString = OBJECT_MAPPER.writeValueAsString(t);
                 Map<String,Object> map = OBJECT_MAPPER.readValue(jsonString, HashMap.class);
-                TreeMap<String, Object> treeMap = new TreeMap<>(Comparator.reverseOrder());
-                treeMap.putAll(map);
 
-                int columnIndex = 0;
-                for (String key : treeMap.keySet()) {
+                for (int columnIndex = 0; columnIndex < rowInfoList.size(); columnIndex++) {
+                    RowInfo rowInfo = rowInfoList.get(columnIndex);
+                    String key = rowInfo.getFieldName();
+                    Object value = map.get(key);
                     //创建单元格
-                    ExcelCell excelCell = fieldNameAnnotationMap.get(key);
+                    ExcelCell excelCell = rowInfo.getAnnotation();
                     CellType cellType = CellType.STRING;
                     if(excelCell != null){
                         cellType = excelCell.cellType();
                     }
 
                     Cell cell = row.createCell(columnIndex, cellType);
-                    cell.setCellValue(treeMap.get(key).toString());
-                    columnIndex ++;
+                    cell.setCellValue(value.toString());
                 }
             }
             workbook.write(os);
@@ -131,6 +130,11 @@ public class JiaLiAo<T> {
         String value();
 
         /**
+         * 顺序，从小到大
+         */
+        int order() default -1;
+
+        /**
          * 单元格数据类型
          */
         CellType cellType() default CellType.STRING;
@@ -139,15 +143,13 @@ public class JiaLiAo<T> {
     /**
      * 顺序信息
      */
-    static class OrderInfo{
+    static class RowInfo {
         /**
          * 字段名
          */
         private String fieldName;
-        /**
-         * 顺序
-         */
-        private Long order;
+
+        private ExcelCell annotation;
 
         public String getFieldName() {
             return fieldName;
@@ -157,12 +159,29 @@ public class JiaLiAo<T> {
             this.fieldName = fieldName;
         }
 
-        public Long getOrder() {
-            return order;
+        public ExcelCell getAnnotation() {
+            return annotation;
         }
 
-        public void setOrder(Long order) {
-            this.order = order;
+        public void setAnnotation(ExcelCell annotation) {
+            this.annotation = annotation;
+        }
+    }
+
+    static class ExcelCellComparator implements Comparator<RowInfo> {
+
+        @Override
+        public int compare(RowInfo o1, RowInfo o2) {
+            //默认值-1尽量不被覆盖
+            if(o1 == null || o2 == null
+               || o1.getAnnotation() == null || o2.getAnnotation() == null
+               ){
+                return 0;
+            }
+            if(o1.getAnnotation().order() == -1){
+                return 1;
+            }
+            return o1.getAnnotation().order() - o2.getAnnotation().order();
         }
     }
 }
