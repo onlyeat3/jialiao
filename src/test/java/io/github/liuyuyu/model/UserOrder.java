@@ -1,6 +1,7 @@
 package io.github.liuyuyu.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.liuyuyu.JiaLiAo;
 import org.apache.poi.ss.usermodel.CellType;
 
@@ -28,6 +29,7 @@ public class UserOrder {
     /**
      * 订单总金额
      */
+    @JsonIgnore
     private BigDecimal totalMoney;
     /**
      * 创建时间
