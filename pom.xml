@@ -6,7 +6,7 @@
 
     <groupId>com.github.liuyuyu</groupId>
     <artifactId>jialiao</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>jiLiAo</name>
     <description>全都是彩蛋的Excel操作库</description>
