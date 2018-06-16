@@ -128,7 +128,7 @@ public class JiaLiAo<T> {
         /**
          * 表头名
          */
-        String value() default "";
+        String value();
 
         /**
          * 单元格数据类型
