@@ -81,9 +81,9 @@ Jackson的其他骚操作也可以用起来了。
 
 
 ### 依赖
-- [ x ] POI
-- [ x ] Jackson
-- [ x ] Java 8
+- [x] POI
+- [x] Jackson
+- [x] Java 8
 
 ### 有多强？
 看这战绩就应该知道加里奥有多厉害了（傲娇脸）
