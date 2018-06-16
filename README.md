@@ -14,7 +14,7 @@ pom.xml增加依赖
 <dependency>
   <groupId>com.github.liuyuyu</groupId>
   <artifactId>jialiao</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 </dependency>
 ```
 梨子代码
