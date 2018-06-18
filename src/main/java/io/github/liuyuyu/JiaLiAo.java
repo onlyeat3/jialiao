@@ -1,6 +1,7 @@
 package io.github.liuyuyu;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
@@ -14,6 +15,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author liuyuyu
@@ -64,7 +66,10 @@ public class JiaLiAo<T> {
                 workbook = new XSSFWorkbook();
             }
 
-            List<RowInfo> rowInfoList = ReflectionUtils.getAllFieldAnnotation(this.jiaLiAo.clazz,new ExcelCellComparator());
+            List<RowInfo> rowInfoList = ReflectionUtils.getAllFieldRowInfoAnnotation(this.jiaLiAo.clazz,new ExcelCellComparator());
+            rowInfoList = rowInfoList.stream()
+                    .filter(r -> !ReflectionUtils.hasAnnotation(this.jiaLiAo.clazz, r.getFieldName(), JsonIgnore.class))
+                    .collect(Collectors.toList());
 
             //创建工作表
             Sheet sheet = workbook.createSheet(name);
@@ -146,7 +151,7 @@ public class JiaLiAo<T> {
                 rowNum = 1;
             }
             Row row = sheet.getRow(rowNum);
-            List<RowInfo> rowInfoList = ReflectionUtils.getAllFieldAnnotation(this.jiaLiAo.clazz, new ExcelCellComparator());
+            List<RowInfo> rowInfoList = ReflectionUtils.getAllFieldRowInfoAnnotation(this.jiaLiAo.clazz, new ExcelCellComparator());
             List<WT> dataList = new ArrayList<>();
             for (int rowIndex = 0; rowIndex < sheet.getLastRowNum(); rowIndex++) {
                 Map<String,Object> map = new HashMap<>();
