@@ -6,9 +6,9 @@
 
     <groupId>com.github.liuyuyu</groupId>
     <artifactId>jialiao</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
-    <name>jiLiAo</name>
+    <name>jiaLiAo</name>
     <description>全都是彩蛋的Excel操作库</description>
     <url>https://github.com/liuyuyu/jialiao</url>
 
