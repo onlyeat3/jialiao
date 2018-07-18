@@ -2,7 +2,7 @@ package test.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import test.JiaLiAo;
+import io.github.liuyuyu.JiaLiAo;
 import org.apache.poi.ss.usermodel.CellType;
 
 import java.math.BigDecimal;

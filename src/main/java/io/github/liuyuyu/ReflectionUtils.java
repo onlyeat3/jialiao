@@ -1,4 +1,4 @@
-package test;
+package io.github.liuyuyu;
 
 
 import java.lang.annotation.Annotation;

@@ -1,4 +1,4 @@
-package test;
+package io.github.liuyuyu;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -49,7 +49,7 @@ public class JiaLiAo<T> {
     /**
      * E技能，击飞（写）
      */
-    static class E<ET>{
+    public static class E<ET>{
         private JiaLiAo<ET> jiaLiAo;
         private List<ET> dataList = new ArrayList<>();
 
@@ -122,7 +122,7 @@ public class JiaLiAo<T> {
     /**
      * W技能，吸收伤害并嘲讽敌人（读）
      */
-    static class W<WT>{
+    public static class W<WT>{
         private JiaLiAo<WT> jiaLiAo;
         /**
          * 是否存在表头
