@@ -1,4 +1,4 @@
-package io.github.liuyuyu;
+package test;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -158,8 +158,10 @@ public class JiaLiAo<T> {
                 for (int columnIndex = 0; columnIndex < rowInfoList.size(); columnIndex++) {
                     RowInfo rowInfo = rowInfoList.get(columnIndex);
                     Cell cell = row.getCell(columnIndex);
-                    String value = cell.getStringCellValue();
-                    map.put(rowInfo.getFieldName(),value);
+                    if(cell != null){
+                        String value = cell.getStringCellValue();
+                        map.put(rowInfo.getFieldName(),value);
+                    }
                 }
                 String mapJsonString = OBJECT_MAPPER.writeValueAsString(map);
                 Object o = OBJECT_MAPPER.readValue(mapJsonString, this.jiaLiAo.clazz);

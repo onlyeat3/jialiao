@@ -1,8 +1,8 @@
-package io.github.liuyuyu;
+package test;
 
-import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.liuyuyu.model.UserOrder;
+import test.model.PhoneTask;
+import test.model.UserOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -11,10 +11,9 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import static org.junit.Assert.*;
 
 /**
  * @author liuyuyu
@@ -58,6 +57,27 @@ public class JiaLiAoTest {
         for (UserOrder o : list) {
             System.out.println(o);
         }
+    }
+
+    @Test
+    public void testExport() throws IOException, InterruptedException {
+        List<PhoneTask> phoneTaskList = IntStream.range(0, 100_000)
+                .boxed()
+                .map(i -> {
+                    PhoneTask phoneTask = new PhoneTask();
+                    phoneTask.setMobile(i + "");
+                    phoneTask.setName("name" + i);
+                    phoneTask.setOrder(i + "");
+                    phoneTask.setRemark("remark" + i);
+                    return phoneTask;
+                })
+                .collect(Collectors.toList());
+        TimeUnit.SECONDS.sleep(5);
+        JiaLiAo.r(PhoneTask.class,Boolean.FALSE)
+                .e(phoneTaskList)
+                .q("电话",new FileOutputStream("out/phone_task.xlsx"));
+        System.out.println("end.");
+        TimeUnit.SECONDS.sleep(5);
     }
 
 }
