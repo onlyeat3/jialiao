@@ -91,7 +91,7 @@ public class JiaLiAo<T> {
             for (int rowIndex = 1; rowIndex < this.dataList.size(); rowIndex++) {
                 //创建行
                 Row row = sheet.createRow(rowIndex);
-                Object t = dataList.get(rowIndex);
+                Object t = dataList.get(rowIndex - 1);
                 String jsonString = OBJECT_MAPPER.writeValueAsString(t);
                 Map<String,Object> map = OBJECT_MAPPER.readValue(jsonString, HashMap.class);
 
