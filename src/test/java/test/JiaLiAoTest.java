@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -62,7 +63,7 @@ public class JiaLiAoTest {
 
     @Test
     public void testExport() throws IOException, InterruptedException {
-        List<PhoneTask> phoneTaskList = IntStream.range(0, 100_000)
+        List<PhoneTask> phoneTaskList = IntStream.range(0, 10)
                 .boxed()
                 .map(i -> {
                     PhoneTask phoneTask = new PhoneTask();
@@ -76,9 +77,17 @@ public class JiaLiAoTest {
         TimeUnit.SECONDS.sleep(5);
         JiaLiAo.r(PhoneTask.class,Boolean.FALSE)
                 .e(phoneTaskList)
-                .q("电话",new FileOutputStream("out/phone_task.xlsx"));
+                .q("电话",new FileOutputStream("c:/tmp/phone_task.xlsx"));
         System.out.println("end.");
+    }
+    @Test
+    public void testExportEmpty() throws IOException, InterruptedException {
+        List<PhoneTask> phoneTaskList = Collections.emptyList();
         TimeUnit.SECONDS.sleep(5);
+        JiaLiAo.r(PhoneTask.class,Boolean.FALSE)
+                .e(phoneTaskList)
+                .q("电话",new FileOutputStream("c:/tmp/phone_task.xlsx"));
+        System.out.println("end.");
     }
 
 }

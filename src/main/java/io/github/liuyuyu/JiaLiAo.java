@@ -88,10 +88,10 @@ public class JiaLiAo<T> {
                 cell.setCellValue(fieldName);
                 headerColumnIndex ++;
             }
-            for (int rowIndex = 1; rowIndex < this.dataList.size(); rowIndex++) {
+            for (int len = 0; len < this.dataList.size(); len++) {
                 //创建行
-                Row row = sheet.createRow(rowIndex);
-                Object t = dataList.get(rowIndex - 1);
+                Row row = sheet.createRow(len+1);
+                Object t = dataList.get(len);
                 String jsonString = OBJECT_MAPPER.writeValueAsString(t);
                 Map<String,Object> map = OBJECT_MAPPER.readValue(jsonString, HashMap.class);
 
