@@ -25,7 +25,7 @@
         <jackson.version>2.9.10.7</jackson.version>
         <poi.version>3.17</poi.version>
 
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
     </properties>
 
 
