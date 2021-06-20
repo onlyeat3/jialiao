@@ -22,7 +22,7 @@
         <maven.deploy.plugin.version>2.8.2</maven.deploy.plugin.version>
 
         <lombok.version>1.16.18</lombok.version>
-        <jackson.version>2.9.5</jackson.version>
+        <jackson.version>2.9.10.7</jackson.version>
         <poi.version>3.17</poi.version>
 
         <junit.version>4.12</junit.version>
