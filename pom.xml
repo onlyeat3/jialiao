@@ -23,7 +23,7 @@
 
         <lombok.version>1.16.18</lombok.version>
         <jackson.version>2.13.4.1</jackson.version>
-        <poi.version>3.17</poi.version>
+        <poi.version>4.1.1</poi.version>
 
         <junit.version>4.13.1</junit.version>
     </properties>
